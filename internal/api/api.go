@@ -101,8 +101,8 @@ type MessageMessageAnswered struct {
 }
 
 type MessageMessageCreated struct {
-	ID string
-	Message string
+	ID string `json:"id"`
+	Message string `json:"message"`
 }
 
 type Message struct {
@@ -233,9 +233,7 @@ func (h apiHandler) handleCreateRoomMessage(w http.ResponseWriter, r *http.Reque
 	type response struct {
 		ID string `json:"id"`
 	}
-	data, _ := json.Marshal(response{ID: messageID.String()})
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(data)
+	sendJSON(w, response{ID: messageID.String()})
 
 	go h.notifyClients(Message{
 		Kind: MessageKindMessageCreated,
